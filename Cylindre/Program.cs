@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Numerics;
 
 namespace Cylindre
@@ -10,18 +8,24 @@ namespace Cylindre
     public class Mesh
     {
         public List<Vector3> Vertices { get; set; }
-        public List<int> Indices { get; set; }
+        public List<Vector3> Normals { get; set; }
+        public List<int> VertIndices { get; set; }
+        public List<int> NormIndices { get; set; }
 
         public Mesh()
         {
             Vertices = new List<Vector3>();
-            Indices = new List<int>();
+            Normals = new List<Vector3>();
+            VertIndices = new List<int>();
+            NormIndices = new List<int>();
         }
 
         public Mesh(int verticesCnt, int indicesCnt)
         {
             Vertices = new List<Vector3>(verticesCnt);
-            Indices = new List<int>(indicesCnt);
+            Normals = new List<Vector3>(verticesCnt);
+            VertIndices = new List<int>(indicesCnt);
+            NormIndices = new List<int>(indicesCnt);
         }
     }
 
@@ -38,7 +42,7 @@ namespace Cylindre
                 var v0 = vertices[i0];
                 var v1 = vertices[i1];
 
-                var midpoint = (v0 + v1) / 2f;
+                var midpoint = (v0+v1) / 2f;
 
                 if (vertices.Contains(midpoint))
                 {
@@ -66,18 +70,18 @@ namespace Cylindre
         {
             var midpointIndices = new Dictionary<Tuple<int, int>, int>();
 
-            var newIndices = new List<int>(mesh.Indices.Count * 4);
+            var newIndices = new List<int>(mesh.VertIndices.Count * 4);
 
             if (!removeSourceTriangles)
             {
-                newIndices.AddRange(mesh.Indices);
+                newIndices.AddRange(mesh.VertIndices);
             }
 
-            for (var i = 0; i < mesh.Indices.Count - 2; i += 3)
+            for (var i = 0; i < mesh.VertIndices.Count-2; i += 3)
             {
-                var i0 = mesh.Indices[i];
-                var i1 = mesh.Indices[i + 1];
-                var i2 = mesh.Indices[i + 2];
+                var i0 = mesh.VertIndices[i];
+                var i1 = mesh.VertIndices[i+1];
+                var i2 = mesh.VertIndices[i+2];
 
                 var m01 = GetMidpointIndex(midpointIndices, mesh.Vertices, i0, i1);
                 var m12 = GetMidpointIndex(midpointIndices, mesh.Vertices, i1, i2);
@@ -93,14 +97,13 @@ namespace Cylindre
                 );
             }
 
-            mesh.Indices = newIndices;
+            mesh.VertIndices = newIndices;
         }
     }
 
 
     class Program
     {
-
         public static Mesh Octahedron()
         {
             Mesh mesh = new Mesh(6, 8*3);
@@ -116,7 +119,7 @@ namespace Cylindre
                 }
             );
 
-            mesh.Indices.AddRange(
+            mesh.VertIndices.AddRange(
                 new[]
                 {
                     0, 2, 1,
@@ -158,7 +161,7 @@ namespace Cylindre
                 }
             );
 
-            mesh.Indices.AddRange(
+            mesh.VertIndices.AddRange(
                 new []
                 {
                     0,1,4,
@@ -205,6 +208,9 @@ namespace Cylindre
                 geosphere.Vertices[i] = Vector3.Normalize(geosphere.Vertices[i]);
             }
 
+            geosphere.Normals.AddRange(geosphere.Vertices);
+            geosphere.NormIndices.AddRange(geosphere.VertIndices);
+
             return geosphere;
         }
 
@@ -219,7 +225,7 @@ namespace Cylindre
             float[] xPts = new float[n];
             float[] zPts = new float[n];
 
-            Mesh sphere = new Mesh(n*n/2 + 1, n*n/2 - n + 2);
+            Mesh sphere = new Mesh(n*n/2+1, n*n/2-n+2);
 
             for (int i = 0; i < n; i++)
             {
@@ -234,8 +240,8 @@ namespace Cylindre
 
             // Compute the points along the y (up) axis
             angleInc = 360.0f/n;
-            currAngle = angleInc + 90;
-            for (int i = 0; i < n/2 - 1; i++)
+            currAngle = angleInc+90;
+            for (int i = 0; i < n/2-1; i++)
             {
                 float angle = DegToRad(currAngle);
                 float radius = (float)Math.Cos(angle);
@@ -253,9 +259,9 @@ namespace Cylindre
             // Top row
             for (int i = 1; i < n; i++)
             {
-                sphere.Indices.AddRange(new[] {0, i+1, i});
+                sphere.VertIndices.AddRange(new[] {0, i+1, i});
             }
-            sphere.Indices.AddRange(new[] {0, 1, n});
+            sphere.VertIndices.AddRange(new[] {0, 1, n});
 
             // Middle rows
             for (int c = 0; c < n/2-2; c++)
@@ -263,14 +269,14 @@ namespace Cylindre
                 int row = c*n;
                 for (int i = row+1; i < row+n; i++)
                 {
-                    sphere.Indices.AddRange(new[]
+                    sphere.VertIndices.AddRange(new[]
                     {
                         i+n, i,   i+1,
                         i+n, i+1, i+n+1
                     });
                 }
 
-                sphere.Indices.AddRange(new[]
+                sphere.VertIndices.AddRange(new[]
                 {
                     row+2*n, row+n, row+1,
                     row+2*n, row+1, row+n+1
@@ -278,14 +284,100 @@ namespace Cylindre
             }
 
             // Bottom row
-            int bottomIdx = n*(n/2 - 1) + 1;
+            int bottomIdx = n*(n/2-1)+1;
             for (int i = n*(n/2-2)+1; i < bottomIdx; i++)
             {
-                sphere.Indices.AddRange(new[] { i+1, bottomIdx, i });
+                sphere.VertIndices.AddRange(new[] { i+1, bottomIdx, i });
             }
-            sphere.Indices.AddRange(new[] { n*(n/2-2)+1, bottomIdx, n*(n/2-1) });
+            sphere.VertIndices.AddRange(new[] {n*(n/2-2)+1, bottomIdx, n*(n/2-1)});
 
+            sphere.Normals.AddRange(sphere.Vertices);
+            sphere.NormIndices.AddRange(sphere.VertIndices);
             return sphere;
+        }
+
+        static Mesh Cylinder(int detailLevel = 15)
+        {
+            int n = detailLevel;
+            Mesh cylinder = new Mesh(2*n+2, 4*n);
+
+            float angleInc = 360.0f / n;
+            float currAngle = 0;
+
+            float[] xPts = new float[n];
+            float[] zPts = new float[n];
+
+            for (int i = 0; i < n; i++)
+            {
+                float angle = DegToRad(currAngle);
+                xPts[i] = (float)Math.Cos(angle);
+                zPts[i] = (float)Math.Sin(angle);
+                currAngle += angleInc;
+            }
+
+            // Vertices for one face.
+            var createVerts = new Action<float>(
+                y =>
+                {
+                    cylinder.Vertices.Add(new Vector3(0, y, 0));
+
+                    angleInc = 360.0f/n;
+                    currAngle = angleInc+90;
+                    for (int i = 0; i < n; i++)
+                    {
+                        cylinder.Vertices.Add(new Vector3(xPts[i], y, zPts[i]));
+                        currAngle += angleInc;
+                    }
+                });
+            createVerts(0);
+            createVerts(1);
+
+            // Normals
+            cylinder.Normals.Add(new Vector3(0, -1, 0));
+
+            angleInc = 360.0f/n;
+            currAngle = angleInc+90;
+            for (int i = 0; i < n; i++)
+            {
+                cylinder.Normals.Add(new Vector3(xPts[i], 0, zPts[i]));
+                currAngle += angleInc;
+            }
+            cylinder.Normals.Add(new Vector3(0, 1, 0));
+
+            // Bottom face
+            for (int i = 1; i < n; i++)
+            {
+                cylinder.VertIndices.AddRange(new[] {0, i, i+1});
+                cylinder.NormIndices.AddRange(new[] {0, 0, 0});
+            }
+            cylinder.VertIndices.AddRange(new[] {0, n, 1});
+            cylinder.NormIndices.AddRange(new[] {0, 0, 0});
+
+            // Top face
+            for (int i = n+2; i < 2*n+1; i++)
+            {
+                cylinder.VertIndices.AddRange(new[] {n+1, i+1, i});
+                cylinder.NormIndices.AddRange(new[] {n+1, n+1, n+1});
+            }
+            cylinder.VertIndices.AddRange(new[] {n+1, n+2, 2*n+1});
+            cylinder.NormIndices.AddRange(new[] {n+1, n+1, n+1});
+
+            // Sides
+            for (int i = 1; i < n; i++)
+            {
+                cylinder.VertIndices.AddRange(new[] {i, i+n+2, i+1});
+                cylinder.NormIndices.AddRange(new[] {i, i+1, i+1});
+
+                cylinder.VertIndices.AddRange(new[] {i, i+n+1, i+n+2});
+                cylinder.NormIndices.AddRange(new[] {i, i, i+1});
+            }
+            cylinder.VertIndices.AddRange(new[] {1, n, n+2});
+            cylinder.NormIndices.AddRange(new[] {1, n, 1});
+
+            cylinder.VertIndices.AddRange(new[] {n, 2*n+1, n+2});
+            cylinder.NormIndices.AddRange(new[] {n, n, 1});
+
+            return cylinder;
         }
 
         static void OutputObj(Mesh mesh, string fileName)
@@ -296,63 +388,30 @@ namespace Cylindre
                 foreach (var vertex in mesh.Vertices)
                 {
                     sr.WriteLine("v {0:f5} {1:f5} {2:f5}", vertex.X, vertex.Y, vertex.Z);
-                    sr.WriteLine("vn {0:f5} {1:f5} {2:f5}", vertex.X, vertex.Y, vertex.Z);
                 }
 
-                for (int i = 0; i < mesh.Indices.Count; i+=3)
+                foreach (var normal in mesh.Normals)
                 {
-                    sr.WriteLine("f {0}//{0} {1}//{1} {2}//{2}", mesh.Indices[i]+1, mesh.Indices[i+1]+1, mesh.Indices[i+2]+1);
+                    sr.WriteLine("vn {0:f5} {1:f5} {2:f5}", normal.X, normal.Y, normal.Z);
+                }
+
+                for (int i = 0; i < mesh.VertIndices.Count; i+=3)
+                {
+                    sr.WriteLine("f {0}//{1} {2}//{3} {4}//{5}",
+                        mesh.VertIndices[i]+1, mesh.NormIndices[i]+1,
+                        mesh.VertIndices[i+1]+1, mesh.NormIndices[i+1]+1,
+                        mesh.VertIndices[i+2]+1, mesh.NormIndices[i+2]+1);
                 }
             }
         }
 
         static void Main(string[] args)
         {
-            Mesh geosphere = Geosphere(2);
-            OutputObj(geosphere, @"c:\dump\geosphere.obj");
-            Mesh sphere = Sphere(5);
-            OutputObj(sphere, @"c:\dump\sphere.obj");
+            OutputObj(Geosphere(2), @"c:\dump\geosphere.obj");
 
-#if false // Cylindre
-    // Compute n circle points
-            int n = 25;
+            OutputObj(Sphere(5), @"c:\dump\sphere.obj");
 
-            double angleInc = 360.0 / n;
-            double currAngle = 0;
-
-            double[] xPts = new double[n];
-            double[] yPts = new double[n];
-
-            for (int i = 0; i < n; i++)
-            {
-                double angle = DegToRad(currAngle);
-                xPts[i] = Math.Cos(angle);
-                yPts[i] = Math.Sin(angle);
-                currAngle += angleInc;
-            }
-
-            using (FileStream fs = File.Open(@"c:\dump\cylindre.obj", FileMode.Create))
-            using (StreamWriter sr = new StreamWriter(fs))
-            {
-                sr.WriteLine("g blah\n");
-                sr.WriteLine("v {0:f5} {1:f5} {2:f5}", 0, 10, 0);
-
-                for (int i = 0; i < n; i++)
-                {
-                    sr.WriteLine("v {0:f5} {1:f5} {2:f5}", xPts[i]*5, 10, yPts[i]*5);
-                }
-                sr.WriteLine();
-
-                sr.WriteLine("vn 0 1 0");
-
-
-                for (int i = 1; i < n ; i++)
-                {
-                    sr.WriteLine("f {0}//1 {1}//1 {2}//1", 1, i+1, i+2);
-                }
-                sr.WriteLine("f {0}//1 {1}//1 {2}//1", 1, n+1, 2);
-            }
-#endif
+            OutputObj(Cylinder(30), @"c:\dump\cylinder.obj");
         }
 
         static float DegToRad(float d)

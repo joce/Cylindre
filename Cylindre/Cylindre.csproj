@@ -46,8 +46,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Cylinder.cs" />
+    <Compile Include="Geosphere.cs" />
+    <Compile Include="MathHelpers.cs" />
+    <Compile Include="Mesh.cs" />
+    <Compile Include="MeshInstance.cs" />
+    <Compile Include="Platonics.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sphere.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

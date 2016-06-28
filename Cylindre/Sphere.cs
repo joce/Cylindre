@@ -15,19 +15,7 @@ namespace Cylindre
             // Compute n circle points
             int n = detailLevel * 2; // we only support even number of subdivision (for now).
 
-            float angleInc = 360.0f / n;
-            float currAngle = 0;
-
-            float[] xPts = new float[n];
-            float[] zPts = new float[n];
-
-            for (int i = 0; i < n; i++)
-            {
-                float angle = MathHelpers.DegToRad(currAngle);
-                xPts[i] = (float)Math.Cos(angle);
-                zPts[i] = (float)Math.Sin(angle);
-                currAngle += angleInc;
-            }
+            Vector2[] pts = MathHelpers.ComputeCirclePoints(n);
 
             Mesh sphere = new Mesh(n*n/2+1, n*n/2-n+2);
 
@@ -35,8 +23,8 @@ namespace Cylindre
             sphere.Vertices.Add(new Vector3(0, 1, 0));
 
             // Compute the points along the y (up) axis
-            angleInc = 360.0f/n;
-            currAngle = angleInc+90;
+            float angleInc = 360.0f/n;
+            float currAngle = angleInc+90;
             for (int i = 0; i < n/2-1; i++)
             {
                 float angle = MathHelpers.DegToRad(currAngle);
@@ -44,7 +32,7 @@ namespace Cylindre
                 float y = (float)Math.Sin(angle);
                 for (int j = 0; j < n; j++)
                 {
-                    sphere.Vertices.Add(new Vector3(xPts[j]*radius, y, zPts[j]*radius));
+                    sphere.Vertices.Add(new Vector3(pts[j].X*radius, y, pts[j].Y*radius));
                 }
                 currAngle += angleInc;
             }
@@ -55,9 +43,9 @@ namespace Cylindre
             // Top row
             for (int i = 1; i < n; i++)
             {
-                sphere.VertIndices.AddRange(new[] { 0, i+1, i });
+                sphere.VertIndices.AddRange(new[] {0, i+1, i});
             }
-            sphere.VertIndices.AddRange(new[] { 0, 1, n });
+            sphere.VertIndices.AddRange(new[] {0, 1, n});
 
             // Middle rows
             for (int c = 0; c < n/2-2; c++)
@@ -85,7 +73,7 @@ namespace Cylindre
             {
                 sphere.VertIndices.AddRange(new[] { i+1, bottomIdx, i });
             }
-            sphere.VertIndices.AddRange(new[] { n*(n/2-2)+1, bottomIdx, n*(n/2-1) });
+            sphere.VertIndices.AddRange(new[] {n*(n/2-2) + 1, bottomIdx, n*(n/2-1)});
 
             sphere.Normals.AddRange(sphere.Vertices);
             sphere.NormIndices.AddRange(sphere.VertIndices);

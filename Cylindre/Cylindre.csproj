@@ -51,6 +51,7 @@
     <Compile Include="MathHelpers.cs" />
     <Compile Include="Mesh.cs" />
     <Compile Include="MeshInstance.cs" />
+    <Compile Include="ObjWriter.cs" />
     <Compile Include="Platonics.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

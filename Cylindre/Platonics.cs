@@ -1,5 +1,4 @@
-﻿using System;
-using System.Numerics;
+﻿using System.Numerics;
 
 namespace Cylindre
 {
@@ -9,15 +8,13 @@ namespace Cylindre
         {
             Mesh mesh = new Mesh(4, 4*3);
 
-            float oneOverSqrt2 = 1f / (float)Math.Sqrt(2);
-
             mesh.Vertices.AddRange(
                 new[]
                 {
-                    new Vector3(1, 0, -oneOverSqrt2),
-                    new Vector3(-1, 0, -oneOverSqrt2),
-                    new Vector3(0, 1, oneOverSqrt2),
-                    new Vector3(0, -1, oneOverSqrt2),
+                    new Vector3(1, 1, 1),
+                    new Vector3(1, -1, -1),
+                    new Vector3(-1, 1, -1),
+                    new Vector3(-1, -1, 1),
                 }
             );
 

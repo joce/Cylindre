@@ -42,6 +42,32 @@ namespace Cylindre
             m_NormOffset += mesh.Normals.Count;
         }
 
+        public void OutputObj(MeshInstance mesh)
+        {
+            foreach (var vertex in mesh.Vertices)
+            {
+                m_StreamWriter.WriteLine("v {0:f5} {1:f5} {2:f5}", vertex.X, vertex.Y, vertex.Z);
+            }
+
+            foreach (var normal in mesh.Normals)
+            {
+                m_StreamWriter.WriteLine("vn {0:f5} {1:f5} {2:f5}", normal.X, normal.Y, normal.Z);
+            }
+
+            // Following isn't optimal. Will do for now.
+            int[] vertIndices = mesh.VertIndices.ToArray();
+            int[] normIndices = mesh.NormIndices.ToArray();
+            for (int i = 0; i < vertIndices.Length; i+=3)
+            {
+                m_StreamWriter.WriteLine("f {0}//{1} {2}//{3} {4}//{5}",
+                    vertIndices[i]  + m_VertOffset, normIndices[i]  + m_NormOffset,
+                    vertIndices[i+1]+ m_VertOffset, normIndices[i+1]+ m_NormOffset,
+                    vertIndices[i+2]+ m_VertOffset, normIndices[i+2]+ m_NormOffset);
+            }
+
+            m_VertOffset += mesh.Vertices.Count();
+            m_NormOffset += mesh.Normals.Count();
+        }
         public void Dispose()
         {
             m_StreamWriter.Dispose();

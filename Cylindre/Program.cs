@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Numerics;
+﻿using System.Numerics;
 
 namespace Cylindre
 {
@@ -9,10 +6,18 @@ namespace Cylindre
     {
         static void Main(string[] args)
         {
-            ObjWriter writer = new ObjWriter();
-            writer.OutputObj(Mesh.Geosphere(), @"c:\dump\geosphere.obj");
-            writer.OutputObj(Mesh.Sphere(), @"c:\dump\sphere.obj");
-            writer.OutputObj(Mesh.Cylinder(), @"c:\dump\cylinder.obj");
+            using (ObjWriter writer = new ObjWriter(@"c:\dump\geosphere.obj"))
+                writer.OutputObj(Mesh.Geosphere());
+            using (ObjWriter writer = new ObjWriter(@"c:\dump\sphere.obj"))
+                writer.OutputObj(Mesh.Sphere());
+            using (ObjWriter writer = new ObjWriter(@"c:\dump\cylinder.obj"))
+                writer.OutputObj(Mesh.Cylinder());
+
+            using (ObjWriter writer = new ObjWriter(@"c:\dump\mix.obj"))
+            {
+                writer.OutputObj(Mesh.Cylinder(30));
+                writer.OutputObj(Mesh.Sphere());
+            }
         }
     }
 }

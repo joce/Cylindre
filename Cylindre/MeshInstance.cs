@@ -18,5 +18,8 @@ namespace Cylindre
         {
             get { return Mesh.Normals.Select(norm => Vector3.Transform(norm, Transform)); }
         }
+
+        public IEnumerable<int> VertIndices => Mesh.VertIndices;
+        public IEnumerable<int> NormIndices => Mesh.NormIndices;
     }
 }

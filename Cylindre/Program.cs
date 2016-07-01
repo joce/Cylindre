@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 
 namespace Cylindre
 {
@@ -12,6 +13,15 @@ namespace Cylindre
                 writer.OutputObj(Mesh.Sphere());
             using (ObjWriter writer = new ObjWriter(@"c:\dump\cylinder.obj"))
                 writer.OutputObj(Mesh.Cylinder());
+
+            using (ObjWriter writer = new ObjWriter(@"c:\dump\tetra.obj"))
+                writer.OutputObj(Mesh.Tetrahedron());
+
+            using (ObjWriter writer = new ObjWriter(@"c:\dump\octa.obj"))
+                writer.OutputObj(Mesh.Octahedron());
+
+            using (ObjWriter writer = new ObjWriter(@"c:\dump\iso.obj"))
+                writer.OutputObj(Mesh.Isocahedron());
 
             using (ObjWriter writer = new ObjWriter(@"c:\dump\mix.obj"))
             {
@@ -27,6 +37,11 @@ namespace Cylindre
                 move.Translation = Vector3.UnitY * 5;
                 ball.Transform = move;
                 writer.OutputObj(ball);
+
+                Matrix4x4 rot = Matrix4x4.CreateRotationZ((float)Math.PI/2);
+                stem.Transform = stem.Transform * rot;
+                writer.OutputObj(stem);
+
             }
         }
     }

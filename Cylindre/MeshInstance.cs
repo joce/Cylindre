@@ -16,7 +16,13 @@ namespace Cylindre
 
         public IEnumerable<Vector3> Normals
         {
-            get { return Mesh.Normals;/*.Select(norm => Vector3.Transform(norm, Transform));*/ }
+            get
+            {
+                Matrix4x4 mat = new Matrix4x4();
+                mat = Transform;
+                mat.Translation = Vector3.Zero;
+                return Mesh.Normals.Select(norm => Vector3.Transform(norm, mat));
+            }
         }
 
         public IEnumerable<int> VertIndices => Mesh.VertIndices;

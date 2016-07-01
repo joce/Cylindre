@@ -84,7 +84,7 @@ namespace Cylindre
         {
             // geosphere
             // Taken from http://gamedev.stackexchange.com/a/31312/86181
-            Mesh geosphere = Icosahedron();
+            Mesh geosphere = Isocahedron();
             //Mesh geosphere = Octahedron();
             //Mesh geosphere = Tetrahedron();
 
@@ -98,9 +98,6 @@ namespace Cylindre
             {
                 geosphere.Vertices[i] = Vector3.Normalize(geosphere.Vertices[i]);
             }
-
-            geosphere.Normals.AddRange(geosphere.Vertices);
-            geosphere.NormIndices.AddRange(geosphere.VertIndices);
 
             return geosphere;
         }

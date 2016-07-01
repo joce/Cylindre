@@ -30,12 +30,15 @@ namespace Cylindre
                 m_StreamWriter.WriteLine("vn {0:f5} {1:f5} {2:f5}", normal.X, normal.Y, normal.Z);
             }
 
+            bool hasNormals = mesh.NormIndices.Any();
+
             for (int i = 0; i < mesh.VertIndices.Count; i+=3)
             {
-                m_StreamWriter.WriteLine("f {0}//{1} {2}//{3} {4}//{5}",
-                    mesh.VertIndices[i]  + m_VertOffset, mesh.NormIndices[i]  + m_NormOffset,
-                    mesh.VertIndices[i+1]+ m_VertOffset, mesh.NormIndices[i+1]+ m_NormOffset,
-                    mesh.VertIndices[i+2]+ m_VertOffset, mesh.NormIndices[i+2]+ m_NormOffset);
+                // we're assuming that if there's any normal index, there's an equal number of normal and vertex indices.
+                m_StreamWriter.WriteLine("f {0}{1} {2}{3} {4}{5}",
+                    mesh.VertIndices[i]  + m_VertOffset, hasNormals ? "//" + mesh.NormIndices[i]  + m_NormOffset : "",
+                    mesh.VertIndices[i+1]+ m_VertOffset, hasNormals ? "//" + mesh.NormIndices[i+1]+ m_NormOffset : "",
+                    mesh.VertIndices[i+2]+ m_VertOffset, hasNormals ? "//" + mesh.NormIndices[i+2]+ m_NormOffset : "");
             }
 
             m_VertOffset += mesh.Vertices.Count;
@@ -57,12 +60,16 @@ namespace Cylindre
             // Following isn't optimal. Will do for now.
             int[] vertIndices = mesh.VertIndices.ToArray();
             int[] normIndices = mesh.NormIndices.ToArray();
+
+            bool hasNormals = normIndices.Any();
+
             for (int i = 0; i < vertIndices.Length; i+=3)
             {
-                m_StreamWriter.WriteLine("f {0}//{1} {2}//{3} {4}//{5}",
-                    vertIndices[i]  + m_VertOffset, normIndices[i]  + m_NormOffset,
-                    vertIndices[i+1]+ m_VertOffset, normIndices[i+1]+ m_NormOffset,
-                    vertIndices[i+2]+ m_VertOffset, normIndices[i+2]+ m_NormOffset);
+                // we're assuming that if there's any normal index, there's an equal number of normal and vertex indices.
+                m_StreamWriter.WriteLine("f {0}{1} {2}{3} {4}{5}",
+                    vertIndices[i]  + m_VertOffset, hasNormals ? "//" + normIndices[i]  + m_NormOffset : "",
+                    vertIndices[i+1]+ m_VertOffset, hasNormals ? "//" + normIndices[i+1]+ m_NormOffset : "",
+                    vertIndices[i+2]+ m_VertOffset, hasNormals ? "//" + normIndices[i+2]+ m_NormOffset : "");
             }
 
             m_VertOffset += mesh.Vertices.Count();

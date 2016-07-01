@@ -75,8 +75,6 @@ namespace Cylindre
             }
             sphere.VertIndices.AddRange(new[] {n*(n/2-2) + 1, bottomIdx, n*(n/2-1)});
 
-            sphere.Normals.AddRange(sphere.Vertices);
-            sphere.NormIndices.AddRange(sphere.VertIndices);
             return sphere;
         }
     }

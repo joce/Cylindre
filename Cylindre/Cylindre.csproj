@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Cylinder.cs" />
     <Compile Include="Geosphere.cs" />
+    <Compile Include="IMesh.cs" />
     <Compile Include="MathHelpers.cs" />
     <Compile Include="Mesh.cs" />
     <Compile Include="MeshInstance.cs" />

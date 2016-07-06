@@ -18,7 +18,7 @@ namespace Cylindre
             m_StreamWriter = new StreamWriter(m_FileStream);
         }
 
-        public void OutputObj(Mesh mesh)
+        public void OutputObj(IMesh mesh)
         {
             foreach (var vertex in mesh.Vertices)
             {
@@ -32,49 +32,34 @@ namespace Cylindre
 
             bool hasNormals = mesh.NormIndices.Any();
 
-            for (int i = 0; i < mesh.VertIndices.Count; i+=3)
+            using (var vertEnum = mesh.VertIndices.GetEnumerator())
+            using (var normEnum = mesh.NormIndices.GetEnumerator())
             {
-                // we're assuming that if there's any normal index, there's an equal number of normal and vertex indices.
-                m_StreamWriter.WriteLine("f {0}{1} {2}{3} {4}{5}",
-                    mesh.VertIndices[i]  + m_VertOffset, hasNormals ? "//" + mesh.NormIndices[i]  + m_NormOffset : "",
-                    mesh.VertIndices[i+1]+ m_VertOffset, hasNormals ? "//" + mesh.NormIndices[i+1]+ m_NormOffset : "",
-                    mesh.VertIndices[i+2]+ m_VertOffset, hasNormals ? "//" + mesh.NormIndices[i+2]+ m_NormOffset : "");
-            }
+                int idx = 0;
+                while (vertEnum.MoveNext())
+                {
+                    normEnum.MoveNext();
+                    switch (idx % 3)
+                    {
+                        case 0:
+                            m_StreamWriter.Write("f {0}{1} ", vertEnum.Current + m_VertOffset, hasNormals ? "//" + normEnum.Current + m_NormOffset : "");
+                            break;
+                        case 1:
+                            m_StreamWriter.Write("{0}{1} ", vertEnum.Current + m_VertOffset, hasNormals ? "//" + normEnum.Current + m_NormOffset : "");
+                            break;
+                        case 2:
+                            m_StreamWriter.WriteLine("{0}{1}", vertEnum.Current + m_VertOffset, hasNormals ? "//" + normEnum.Current + m_NormOffset : "");
+                            break;
+                    }
 
-            m_VertOffset += mesh.Vertices.Count;
-            m_NormOffset += mesh.Normals.Count;
-        }
-
-        public void OutputObj(MeshInstance mesh)
-        {
-            foreach (var vertex in mesh.Vertices)
-            {
-                m_StreamWriter.WriteLine("v {0:f5} {1:f5} {2:f5}", vertex.X, vertex.Y, vertex.Z);
-            }
-
-            foreach (var normal in mesh.Normals)
-            {
-                m_StreamWriter.WriteLine("vn {0:f5} {1:f5} {2:f5}", normal.X, normal.Y, normal.Z);
-            }
-
-            // Following isn't optimal. Will do for now.
-            int[] vertIndices = mesh.VertIndices.ToArray();
-            int[] normIndices = mesh.NormIndices.ToArray();
-
-            bool hasNormals = normIndices.Any();
-
-            for (int i = 0; i < vertIndices.Length; i+=3)
-            {
-                // we're assuming that if there's any normal index, there's an equal number of normal and vertex indices.
-                m_StreamWriter.WriteLine("f {0}{1} {2}{3} {4}{5}",
-                    vertIndices[i]  + m_VertOffset, hasNormals ? "//" + normIndices[i]  + m_NormOffset : "",
-                    vertIndices[i+1]+ m_VertOffset, hasNormals ? "//" + normIndices[i+1]+ m_NormOffset : "",
-                    vertIndices[i+2]+ m_VertOffset, hasNormals ? "//" + normIndices[i+2]+ m_NormOffset : "");
+                    idx++;
+                }
             }
 
             m_VertOffset += mesh.Vertices.Count();
             m_NormOffset += mesh.Normals.Count();
         }
+
         public void Dispose()
         {
             m_StreamWriter.Dispose();

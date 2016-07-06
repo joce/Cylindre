@@ -4,7 +4,7 @@ using System.Numerics;
 
 namespace Cylindre
 {
-    public class MeshInstance
+    public class MeshInstance : IMesh
     {
         public Mesh Mesh { get; set; }
         public Matrix4x4 Transform { get; set; } = Matrix4x4.Identity;
@@ -18,8 +18,7 @@ namespace Cylindre
         {
             get
             {
-                Matrix4x4 mat = new Matrix4x4();
-                mat = Transform;
+                Matrix4x4 mat = Transform;
                 mat.Translation = Vector3.Zero;
                 return Mesh.Normals.Select(norm => Vector3.Transform(norm, mat));
             }

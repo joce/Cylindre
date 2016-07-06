@@ -8,7 +8,7 @@ namespace Cylindre
         {
             Mesh mesh = new Mesh(4, 4*3);
 
-            mesh.Vertices.AddRange(
+            mesh.m_Vertices.AddRange(
                 new[]
                 {
                     new Vector3(1, 1, 1),
@@ -18,7 +18,7 @@ namespace Cylindre
                 }
             );
 
-            mesh.VertIndices.AddRange(
+            mesh.m_VertIndices.AddRange(
                 new[]
                 {
                     0, 1, 2,
@@ -34,7 +34,7 @@ namespace Cylindre
         public static Mesh Octahedron()
         {
             Mesh mesh = new Mesh(6, 8*3);
-            mesh.Vertices.AddRange(
+            mesh.m_Vertices.AddRange(
                 new[]
                 {
                     new Vector3(0, 1, 0),
@@ -46,7 +46,7 @@ namespace Cylindre
                 }
             );
 
-            mesh.VertIndices.AddRange(
+            mesh.m_VertIndices.AddRange(
                 new[]
                 {
                     0, 1, 2,
@@ -70,7 +70,7 @@ namespace Cylindre
             var X = 0.525731112119133606f;
             var Z = 0.850650808352039932f;
 
-            mesh.Vertices.AddRange(
+            mesh.m_Vertices.AddRange(
                 new[]
                 {
                     new Vector3(-X, 0f, Z),
@@ -88,7 +88,7 @@ namespace Cylindre
                 }
             );
 
-            mesh.VertIndices.AddRange(
+            mesh.m_VertIndices.AddRange(
                 new[]
                 {
                     0,1,4,

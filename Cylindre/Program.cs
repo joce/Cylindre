@@ -42,6 +42,9 @@ namespace Cylindre
                 stem.Transform = stem.Transform * rot;
                 writer.OutputObj(stem);
 
+                ball.Transform = ball.Transform * rot;
+
+                writer.OutputObj(ball);
             }
         }
     }

@@ -3,27 +3,32 @@ using System.Numerics;
 
 namespace Cylindre
 {
-    public partial class Mesh
+    public partial class Mesh : IMesh
     {
-        public List<Vector3> Vertices { get; set; }
-        public List<Vector3> Normals { get; set; }
-        public List<int> VertIndices { get; set; }
-        public List<int> NormIndices { get; set; }
+        private List<Vector3> m_Vertices;
+        private List<Vector3> m_Normals;
+        private List<int> m_VertIndices;
+        private List<int> m_NormIndices;
+
+        public IEnumerable<Vector3> Vertices => m_Vertices;
+        public IEnumerable<Vector3> Normals => m_Normals;
+        public IEnumerable<int> VertIndices => m_VertIndices;
+        public IEnumerable<int> NormIndices => m_NormIndices;
 
         public Mesh()
         {
-            Vertices = new List<Vector3>();
-            Normals = new List<Vector3>();
-            VertIndices = new List<int>();
-            NormIndices = new List<int>();
+            m_Vertices = new List<Vector3>();
+            m_Normals = new List<Vector3>();
+            m_VertIndices = new List<int>();
+            m_NormIndices = new List<int>();
         }
 
         public Mesh(int verticesCnt, int indicesCnt)
         {
-            Vertices = new List<Vector3>(verticesCnt);
-            Normals = new List<Vector3>(verticesCnt);
-            VertIndices = new List<int>(indicesCnt);
-            NormIndices = new List<int>(indicesCnt);
+            m_Vertices = new List<Vector3>(verticesCnt);
+            m_Normals = new List<Vector3>(verticesCnt);
+            m_VertIndices = new List<int>(indicesCnt);
+            m_NormIndices = new List<int>(indicesCnt);
         }
     }
 }

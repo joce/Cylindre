@@ -45,22 +45,22 @@ namespace Cylindre
         {
             var midpointIndices = new Dictionary<Tuple<int, int>, int>();
 
-            var newIndices = new List<int>(mesh.VertIndices.Count * 4);
+            var newIndices = new List<int>(mesh.m_VertIndices.Count * 4);
 
             if (!removeSourceTriangles)
             {
-                newIndices.AddRange(mesh.VertIndices);
+                newIndices.AddRange(mesh.m_VertIndices);
             }
 
-            for (var i = 0; i < mesh.VertIndices.Count-2; i += 3)
+            for (var i = 0; i < mesh.m_VertIndices.Count-2; i += 3)
             {
-                var i0 = mesh.VertIndices[i];
-                var i1 = mesh.VertIndices[i+1];
-                var i2 = mesh.VertIndices[i+2];
+                var i0 = mesh.m_VertIndices[i];
+                var i1 = mesh.m_VertIndices[i+1];
+                var i2 = mesh.m_VertIndices[i+2];
 
-                var m01 = GetMidpointIndex(midpointIndices, mesh.Vertices, i0, i1);
-                var m12 = GetMidpointIndex(midpointIndices, mesh.Vertices, i1, i2);
-                var m02 = GetMidpointIndex(midpointIndices, mesh.Vertices, i2, i0);
+                var m01 = GetMidpointIndex(midpointIndices, mesh.m_Vertices, i0, i1);
+                var m12 = GetMidpointIndex(midpointIndices, mesh.m_Vertices, i1, i2);
+                var m02 = GetMidpointIndex(midpointIndices, mesh.m_Vertices, i2, i0);
 
                 newIndices.AddRange(
                     new[] {
@@ -72,7 +72,7 @@ namespace Cylindre
                 );
             }
 
-            mesh.VertIndices = newIndices;
+            mesh.m_VertIndices = newIndices;
         }
 
         public static Mesh Geosphere()
@@ -94,9 +94,9 @@ namespace Cylindre
             }
 
             // normalize vertices to "inflate" the icosahedron into a sphere.
-            for (var i = 0; i < geosphere.Vertices.Count; i++)
+            for (var i = 0; i < geosphere.m_Vertices.Count; i++)
             {
-                geosphere.Vertices[i] = Vector3.Normalize(geosphere.Vertices[i]);
+                geosphere.m_Vertices[i] = Vector3.Normalize(geosphere.m_Vertices[i]);
             }
 
             return geosphere;

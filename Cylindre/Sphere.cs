@@ -20,7 +20,7 @@ namespace Cylindre
             Mesh sphere = new Mesh(n*n/2+1, n*n/2-n+2);
 
             // Top point
-            sphere.Vertices.Add(new Vector3(0, 1, 0));
+            sphere.m_Vertices.Add(new Vector3(0, 1, 0));
 
             // Compute the points along the y (up) axis
             float angleInc = 360.0f/n;
@@ -32,20 +32,20 @@ namespace Cylindre
                 float y = (float)Math.Sin(angle);
                 for (int j = 0; j < n; j++)
                 {
-                    sphere.Vertices.Add(new Vector3(pts[j].X*radius, y, pts[j].Y*radius));
+                    sphere.m_Vertices.Add(new Vector3(pts[j].X*radius, y, pts[j].Y*radius));
                 }
                 currAngle += angleInc;
             }
 
             // Bottom point
-            sphere.Vertices.Add(new Vector3(0, -1, 0));
+            sphere.m_Vertices.Add(new Vector3(0, -1, 0));
 
             // Top row
             for (int i = 1; i < n; i++)
             {
-                sphere.VertIndices.AddRange(new[] {0, i+1, i});
+                sphere.m_VertIndices.AddRange(new[] {0, i+1, i});
             }
-            sphere.VertIndices.AddRange(new[] {0, 1, n});
+            sphere.m_VertIndices.AddRange(new[] {0, 1, n});
 
             // Middle rows
             for (int c = 0; c < n/2-2; c++)
@@ -53,14 +53,14 @@ namespace Cylindre
                 int row = c*n;
                 for (int i = row+1; i < row+n; i++)
                 {
-                    sphere.VertIndices.AddRange(new[]
+                    sphere.m_VertIndices.AddRange(new[]
                     {
                         i+n, i,   i+1,
                         i+n, i+1, i+n+1
                     });
                 }
 
-                sphere.VertIndices.AddRange(new[]
+                sphere.m_VertIndices.AddRange(new[]
                 {
                     row+2*n, row+n, row+1,
                     row+2*n, row+1, row+n+1
@@ -71,9 +71,9 @@ namespace Cylindre
             int bottomIdx = n*(n/2-1)+1;
             for (int i = n*(n/2-2)+1; i < bottomIdx; i++)
             {
-                sphere.VertIndices.AddRange(new[] { i+1, bottomIdx, i });
+                sphere.m_VertIndices.AddRange(new[] { i+1, bottomIdx, i });
             }
-            sphere.VertIndices.AddRange(new[] {n*(n/2-2) + 1, bottomIdx, n*(n/2-1)});
+            sphere.m_VertIndices.AddRange(new[] {n*(n/2-2) + 1, bottomIdx, n*(n/2-1)});
 
             return sphere;
         }

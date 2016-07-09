@@ -77,10 +77,15 @@ namespace Cylindre
 
         public static Mesh Geosphere()
         {
-            return Geosphere(2);
+            return Geosphere(1f);
         }
 
-        public static Mesh Geosphere(int detailLevel)
+        public static Mesh Geosphere(float radius)
+        {
+            return Geosphere(radius, 2);
+        }
+
+        public static Mesh Geosphere(float radius, int detailLevel)
         {
             // geosphere
             // Taken from http://gamedev.stackexchange.com/a/31312/86181
@@ -96,7 +101,7 @@ namespace Cylindre
             // normalize vertices to "inflate" the icosahedron into a sphere.
             for (var i = 0; i < geosphere.m_Vertices.Count; i++)
             {
-                geosphere.m_Vertices[i] = Vector3.Normalize(geosphere.m_Vertices[i]);
+                geosphere.m_Vertices[i] = Vector3.Normalize(geosphere.m_Vertices[i]) * radius;
             }
 
             return geosphere;

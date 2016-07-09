@@ -25,10 +25,10 @@ namespace Cylindre
 
             using (ObjWriter writer = new ObjWriter(@"c:\dump\mix.obj"))
             {
-                Mesh cylinder = Mesh.Cylinder(20);
-                Mesh sphere = Mesh.Sphere(10);
-                MeshInstance stem = new MeshInstance() {Mesh = cylinder};
-                MeshInstance ball = new MeshInstance() {Mesh = sphere};
+                Mesh cylinder = Mesh.Cylinder(1, 1, 20);
+                Mesh sphere = Mesh.Sphere(1, 10);
+                MeshInstance stem = new MeshInstance {Mesh = cylinder};
+                MeshInstance ball = new MeshInstance {Mesh = sphere};
                 Matrix4x4 stretch = Matrix4x4.CreateScale(new Vector3(1, 5, 1));
                 stem.Transform = stretch;
                 writer.OutputObj(ball);

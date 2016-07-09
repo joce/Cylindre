@@ -6,15 +6,22 @@ namespace Cylindre
     {
         public static Mesh Tetrahedron()
         {
+            return Tetrahedron(1);
+        }
+
+        public static Mesh Tetrahedron(float size)
+        {
             Mesh mesh = new Mesh(4, 4*3);
+
+            float dist = 0.577350269189626f * size;
 
             mesh.m_Vertices.AddRange(
                 new[]
                 {
-                    new Vector3(1, 1, 1),
-                    new Vector3(1, -1, -1),
-                    new Vector3(-1, 1, -1),
-                    new Vector3(-1, -1, 1),
+                    new Vector3(dist, dist, dist),
+                    new Vector3(dist, -dist, -dist),
+                    new Vector3(-dist, dist, -dist),
+                    new Vector3(-dist, -dist, dist),
                 }
             );
 
@@ -33,16 +40,24 @@ namespace Cylindre
 
         public static Mesh Octahedron()
         {
+            return Octahedron(1);
+        }
+
+        public static Mesh Octahedron(float size)
+        {
             Mesh mesh = new Mesh(6, 8*3);
+
+            float dist = 0.707106781186548f * size;
+
             mesh.m_Vertices.AddRange(
                 new[]
                 {
-                    new Vector3(0, 1, 0),
-                    new Vector3(0, 0, 1),
-                    new Vector3(1, 0, 0),
-                    new Vector3(0, 0, -1),
-                    new Vector3(-1, 0, 0),
-                    new Vector3(0, -1, 0),
+                    new Vector3(0, size, 0),
+                    new Vector3(dist, 0, -dist),
+                    new Vector3(-dist, 0, -dist),
+                    new Vector3(-dist, 0, dist),
+                    new Vector3(dist, 0, dist),
+                    new Vector3(0, -size, 0),
                 }
             );
 
@@ -65,26 +80,31 @@ namespace Cylindre
 
         public static Mesh Isocahedron()
         {
+            return Isocahedron(1);
+        }
+
+        public static Mesh Isocahedron(float size)
+        {
             Mesh mesh = new Mesh(12, 20*3);
 
-            var X = 0.525731112119133606f;
-            var Z = 0.850650808352039932f;
+            float x = 0.525731112119133606f * size;
+            float z = 0.850650808352039932f * size;
 
             mesh.m_Vertices.AddRange(
                 new[]
                 {
-                    new Vector3(-X, 0f, Z),
-                    new Vector3(X, 0f, Z),
-                    new Vector3(-X, 0f, -Z),
-                    new Vector3(X, 0f, -Z),
-                    new Vector3(0f, Z, X),
-                    new Vector3(0f, Z, -X),
-                    new Vector3(0f, -Z, X),
-                    new Vector3(0f, -Z, -X),
-                    new Vector3(Z, X, 0f),
-                    new Vector3(-Z, X, 0f),
-                    new Vector3(Z, -X, 0f),
-                    new Vector3(-Z, -X, 0f)
+                    new Vector3(-x, 0f, z),
+                    new Vector3(x, 0f, z),
+                    new Vector3(-x, 0f, -z),
+                    new Vector3(x, 0f, -z),
+                    new Vector3(0f, z, x),
+                    new Vector3(0f, z, -x),
+                    new Vector3(0f, -z, x),
+                    new Vector3(0f, -z, -x),
+                    new Vector3(z, x, 0f),
+                    new Vector3(-z, x, 0f),
+                    new Vector3(z, -x, 0f),
+                    new Vector3(-z, -x, 0f)
                 }
             );
 

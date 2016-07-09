@@ -7,15 +7,20 @@ namespace Cylindre
     {
         public static Mesh Cylinder()
         {
-            return Cylinder(15);
+            return Cylinder(1, 1);
         }
 
-        public static Mesh Cylinder(int detailLevel)
+        public static Mesh Cylinder(float radius, float height)
+        {
+            return Cylinder(radius, height, 15);
+        }
+
+        public static Mesh Cylinder(float radius, float height, int detailLevel)
         {
             int n = detailLevel;
 
             Vector2[] pts = MathHelpers.ComputeCirclePoints(n);
-            Mesh cylinder = new Mesh(2*n+2, 4*n);
+            Mesh cylinder = new Mesh(2*n+2, 12*n);
 
             // m_vertices for one face.
             var createVerts = new Action<float>(
@@ -25,11 +30,11 @@ namespace Cylindre
 
                     for (int i = 0; i < n; i++)
                     {
-                        cylinder.m_Vertices.Add(new Vector3(pts[i].X, y, pts[i].Y));
+                        cylinder.m_Vertices.Add(new Vector3(pts[i].X * radius, y, pts[i].Y * radius));
                     }
                 });
             createVerts(0);
-            createVerts(1);
+            createVerts(height);
 
             // Bottom face
             for (int i = 1; i < n; i++)

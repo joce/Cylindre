@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Numerics;
 
-namespace Cylindre
+namespace ObjFarm
 {
     public partial class Mesh : IMesh
     {

@@ -2,7 +2,7 @@
 using System.IO;
 using System.Linq;
 
-namespace Cylindre
+namespace ObjFarm
 {
     public class ObjWriter :IDisposable
     {

@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cylindre", "Cylindre\Cylindre.csproj", "{60C65488-F5AE-43E1-88BF-85BEDB820EBC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ObjFarm", "ObjFarm\ObjFarm.csproj", "{60C65488-F5AE-43E1-88BF-85BEDB820EBC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Numerics;
 
-namespace Cylindre
+namespace ObjFarm
 {
     public class MeshInstance : IMesh
     {

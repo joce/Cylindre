@@ -1,4 +1,4 @@
-/ObjFarm/bin
-/ObjFarm/obj
+/src/ObjFarm/bin
+/src/ObjFarm/obj
 
 *.suo
